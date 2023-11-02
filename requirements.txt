@@ -4,5 +4,5 @@ Flask-JWT-Extended==4.3.1
 Werkzeug==2.0.2
 pymongo==3.12.1
 redis==3.5.3
-flask-socketio
-eventlet
+pymongo[srv]
+certifi

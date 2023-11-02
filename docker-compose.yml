@@ -5,7 +5,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      MONGO_URI: "mongodb+srv://agnanimayur:0YfnfbZWmMQfC6Vc@cluster0.d7w8l8l.mongodb.net/user_db"
+      MONGO_URI: "mongodb+srv://cloudflare:cloudflare@cluster0.d7w8l8l.mongodb.net/?retryWrites=true&w=majority"
     depends_on:
       - mongo
       - redis

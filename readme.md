@@ -52,107 +52,84 @@ This command will set up containers for the Flask application, MongoDB, and Redi
 3. Once the containers are up and running, you can access the URL shortener at [http://localhost:5000](http://localhost:5000).
 
   
-  
+  Sure, here's a REST API documentation for the Flask application you provided:
 
-## API Endpoints
+## URL Shortener API Documentation
 
-  
+This API allows you to create short URLs, retrieve long URLs, delete short URLs, and get URL statistics. It is a URL shortening service that uses MongoDB for storing URL data and Redis for caching.
 
-### Shorten a URL
+### Base URL
+The base URL of the API is: `http://localhost:5000`
 
-  
+### Endpoints
 
--  **Endpoint**: `/tiny`
+#### 1. Home Page
+- **Endpoint:** `/`
+- **Method:** GET
+- **Description:** Display the home page of the URL Shortener.
+- **Response:** A simple message indicating the home page of the application.
 
--  **Method**: `POST`
+#### 2. Create a Short URL
+- **Endpoint:** `/tiny`
+- **Method:** POST
+- **Description:** Create a short URL for a given long URL and store it in the database.
+- **Request Payload:** JSON object with a single field `"long_url"` representing the long URL to be shortened. An optional field `"expiration_time"` can be provided to set an expiration time for the short URL.
+  Example Request:
+  ```json
+  {
+    "long_url": "https://www.example.com/very-long-url-that-needs-shortening",
+    "expiration_time": 1675041600
+  }
+  ```
+- **Response:** JSON object with a status and the generated short URL.
+  Example Response:
+  ```json
+  {
+    "status": true,
+    "message": "Short URL created",
+    "short_url": "http://localhost:5000/tiny/abc123"
+  }
+  ```
 
--  **Input**: JSON object with a `long_url` field.
+#### 3. Retrieve the Long URL
+- **Endpoint:** `/tiny/{short_url}`
+- **Method:** GET
+- **Description:** Retrieve the long URL associated with a short URL.
+- **Response:** JSON object with a status and the long URL. If the short URL has expired, it returns an error message.
+  Example Response:
+  ```json
+  {
+    "status": true,
+    "long_url": "https://www.example.com/original-long-url"
+  }
+  ```
 
--  **Output**: A JSON response with the shortened URL.
+#### 4. Delete a Short URL
+- **Endpoint:** `/tiny/{short_url}`
+- **Method:** DELETE
+- **Description:** Delete a short URL from the database.
+- **Response:** JSON object with a status indicating whether the short URL was successfully deleted or not.
 
-  
+#### 5. Retrieve URL Statistics
+- **Endpoint:** `/tiny/stats/{short_url}`
+- **Method:** GET
+- **Description:** Retrieve statistics for a short URL, including the number of clicks within the last 24 hours, the last 7 days, and all time.
+- **Response:** JSON object with a status and the access counts.
+  Example Response:
+  ```json
+  {
+    "status": true,
+    "24_hr_count": 10,
+    "7_day_count": 100,
+    "all_time_count": 1000
+  }
+  ```
 
-Example:
+### Usage Examples
+You can use the provided Python script to interact with these endpoints. Make POST requests to create short URLs, GET requests to retrieve long URLs or statistics, and DELETE requests to delete short URLs.
 
-  
+Feel free to add any additional details or modify the documentation as needed for your specific use case.
 
-```bash
-
-curl  -X  POST  -H  "Content-Type: application/json"  -d  '{"long_url": "https://www.example.com"}'  http://localhost:5000/tiny
-
-```
-
-  
-
-### Access a Long URL
-
-  
-
--  **Endpoint**: `/tiny/<short_url>`
-
--  **Method**: `GET`
-
--  **Output**: A JSON response with the original long URL.
-
-  
-
-Example:
-
-  
-
-```bash
-
-curl  http://localhost:5000/tiny/<short_url>
-
-```
-
-  
-
-### Delete a Short URL
-
-  
-
--  **Endpoint**: `/tiny/<short_url>`
-
--  **Method**: `DELETE`
-
--  **Output**: A JSON response indicating the status of the deletion operation.
-
-  
-
-Example:
-
-  
-
-```bash
-
-curl  -X  DELETE  http://localhost:5000/tiny/<short_url>
-
-```
-
-  
-
-### Get URL Statistics
-
-  
-
--  **Endpoint**: `/tiny/stats/<short_url>`
-
--  **Method**: `GET`
-
--  **Output**: A JSON response with access statistics for the given short URL.
-
-  
-
-Example:
-
-  
-
-```bash
-
-curl  http://localhost:5000/tiny/stats/<short_url>
-
-```
 
   
 
@@ -160,7 +137,8 @@ curl  http://localhost:5000/tiny/stats/<short_url>
 
   
 
-```message = {
+```
+message = {
 
 "creation_time": time,
 
@@ -248,6 +226,6 @@ If you encounter any issues or errors during setup or while using the applicatio
 
 - Potwntially a Key Generation service can be used and a certain number of keys can be cached
 
-- Load Balancing
+-  - Load Balancing
 
-- Sharding the urls
+-  - Sharding the urls

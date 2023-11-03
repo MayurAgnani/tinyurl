@@ -181,9 +181,11 @@ def delete_short_url(short_url):
             if redis_cache.exists(short_url):
                 redis_cache.delete(short_url)
             return jsonify({"status": True, "message": "Short URL deleted"})
+        else:
+            return jsonify({"status": False, "error": "Short URL not found"}, 404)
     except Exception as e:
         logging.error("An error occurred while deleting the short URL: %s", str(e))
-    return jsonify({"status": False, "error": "Short URL not found"}, 404)
+  
 
 
 @app.route("/tiny/stats/<string:short_url>")

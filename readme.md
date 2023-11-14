@@ -51,8 +51,7 @@ This command will set up containers for the Flask application, MongoDB, and Redi
 
 3. Once the containers are up and running, you can access the URL shortener at [http://localhost:5000](http://localhost:5000).
 
-  
-  Sure, here's a REST API documentation for the Flask application you provided:
+
 
 ## URL Shortener API Documentation
 
